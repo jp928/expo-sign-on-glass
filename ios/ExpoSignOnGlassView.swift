@@ -5,6 +5,7 @@ import UIKit
 // This view will be used as a native component. Make sure to inherit from `ExpoView`
 // to apply the proper styling (e.g. border radius and shadows).
 class ExpoSignOnGlassView: ExpoView {
+    private var signatureDelegate: SignOnGlassViewDelegate?
     let canvasView = PKCanvasView()
     let onStartSign = EventDispatcher()
     var isPencilInputEnabled: Bool = true
@@ -20,7 +21,7 @@ class ExpoSignOnGlassView: ExpoView {
         canvasView.drawingPolicy = .anyInput
         canvasView.backgroundColor = .clear
         // Create and store delegate
-        let signatureDelegate = SignOnGlassViewDelegate { [weak self] base64String in
+        signatureDelegate = SignOnGlassViewDelegate { [weak self] base64String in
             self?.onStartSign(["signature": base64String])
         }
         
@@ -74,6 +75,7 @@ class SignOnGlassViewDelegate: NSObject, PKCanvasViewDelegate {
     
     init(onStartSign: @escaping (String) -> Void) {
         self.onStartSign = onStartSign
+        super.init()
     }
     
     func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
