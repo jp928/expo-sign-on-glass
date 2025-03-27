@@ -1,36 +1,35 @@
-import { useEvent } from 'expo';
-import ExpoSignOnGlass, { ExpoSignOnGlassView } from 'expo-sign-on-glass';
-import { Button, SafeAreaView, ScrollView, Text, View } from 'react-native';
+import { ExpoSignOnGlassView } from "expo-sign-on-glass";
+import { useRef } from "react";
+import { Button, SafeAreaView, ScrollView, Text, View } from "react-native";
 
 export default function App() {
-  const onChangePayload = useEvent(ExpoSignOnGlass, 'onChange');
-
+  const ref = useRef<any>(null);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.container}>
         <Text style={styles.header}>Module API Example</Text>
-        <Group name="Constants">
-          <Text>{ExpoSignOnGlass.PI}</Text>
-        </Group>
-        <Group name="Functions">
-          <Text>{ExpoSignOnGlass.hello()}</Text>
-        </Group>
         <Group name="Async functions">
           <Button
-            title="Set value"
+            title="Expose signature"
             onPress={async () => {
-              await ExpoSignOnGlass.setValueAsync('Hello from JS!');
+              // await ExpoSignOnGlass.setValueAsync("Hello from JS!");
+              const res = await ref.current.expose();
+              console.log(res);
+            }}
+          />
+          <Button
+            title="Clear canvas"
+            onPress={async () => {
+              // await ExpoSignOnGlass.setValueAsync("Hello from JS!");
+              await ref.current.clear();
             }}
           />
         </Group>
-        <Group name="Events">
-          <Text>{onChangePayload?.value}</Text>
-        </Group>
         <Group name="Views">
           <ExpoSignOnGlassView
-            url="https://www.example.com"
-            onLoad={({ nativeEvent: { url } }) => console.log(`Loaded: ${url}`)}
+            ref={ref}
             style={styles.view}
+            onStartSign={(d) => console.log(d)}
           />
         </Group>
       </ScrollView>
@@ -58,13 +57,13 @@ const styles = {
   },
   group: {
     margin: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 10,
     padding: 20,
   },
   container: {
     flex: 1,
-    backgroundColor: '#eee',
+    backgroundColor: "#eee",
   },
   view: {
     flex: 1,

@@ -5,44 +5,31 @@ public class ExpoSignOnGlassModule: Module {
   // that describes the module's functionality and behavior.
   // See https://docs.expo.dev/modules/module-api for more details about available components.
   public func definition() -> ModuleDefinition {
-    // Sets the name of the module that JavaScript code will use to refer to the module. Takes a string as an argument.
-    // Can be inferred from module's class name, but it's recommended to set it explicitly for clarity.
-    // The module will be accessible from `requireNativeModule('ExpoSignOnGlass')` in JavaScript.
     Name("ExpoSignOnGlass")
 
-    // Sets constant properties on the module. Can take a dictionary or a closure that returns a dictionary.
-    Constants([
-      "PI": Double.pi
-    ])
-
-    // Defines event names that the module can send to JavaScript.
-    Events("onChange")
-
-    // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
-    Function("hello") {
-      return "Hello world! 👋"
-    }
-
-    // Defines a JavaScript function that always returns a Promise and whose native code
-    // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { (value: String) in
-      // Send an event to JavaScript.
-      self.sendEvent("onChange", [
-        "value": value
-      ])
-    }
-
-    // Enables the module to be used as a native view. Definition components that are accepted as part of the
-    // view definition: Prop, Events.
     View(ExpoSignOnGlassView.self) {
-      // Defines a setter for the `url` prop.
-      Prop("url") { (view: ExpoSignOnGlassView, url: URL) in
-        if view.webView.url != url {
-          view.webView.load(URLRequest(url: url))
-        }
-      }
+        AsyncFunction("expose") {  (view: ExpoSignOnGlassView, promise: Promise)  in
+          if let image = view.getSignatureImage() {
+          // Compress the image data with medium quality (0.5)
+            if let compressedData = image.jpegData(compressionQuality: 0.5) {
+              let base64String = compressedData.base64EncodedString()
+              // Add data URI header for JPEG image
+              let dataUri = "data:image/jpeg;base64," + base64String
+              promise.resolve(dataUri)
+            } else {
+              promise.reject(Exception(name: "CompressionError", description: "Failed to compress image"))
+            }
+          } else {
+            promise.reject(Exception(name: "GetSignatureError", description: "Failed to get signature image"))
+          }
+        }.runOnQueue(.main)
 
-      Events("onLoad")
+        AsyncFunction("clear") { (view: ExpoSignOnGlassView, promise: Promise)  in
+          view.clearCanvas()
+        }.runOnQueue(.main)
     }
+
+    Events("onStartSign")
+      
   }
 }

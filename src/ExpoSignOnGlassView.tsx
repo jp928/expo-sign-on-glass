@@ -1,11 +1,20 @@
-import { requireNativeView } from 'expo';
-import * as React from 'react';
+import { requireNativeView } from "expo";
+import * as React from "react";
 
-import { ExpoSignOnGlassViewProps } from './ExpoSignOnGlass.types';
+import {
+  ExpoSignOnGlassViewProps,
+  ExpoSignOnGlassViewType,
+} from "./ExpoSignOnGlass.types";
 
-const NativeView: React.ComponentType<ExpoSignOnGlassViewProps> =
-  requireNativeView('ExpoSignOnGlass');
+const NativeView: React.ComponentType<
+  ExpoSignOnGlassViewProps & { ref: React.Ref<ExpoSignOnGlassViewType> }
+> = requireNativeView("ExpoSignOnGlass");
 
-export default function ExpoSignOnGlassView(props: ExpoSignOnGlassViewProps) {
-  return <NativeView {...props} />;
-}
+const ExpoSignOnGlassView = React.forwardRef<
+  ExpoSignOnGlassViewType,
+  ExpoSignOnGlassViewProps
+>((props, ref) => {
+  return <NativeView {...props} ref={ref} />;
+});
+
+export default ExpoSignOnGlassView;

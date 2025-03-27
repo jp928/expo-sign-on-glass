@@ -1,19 +1,19 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 
-export type OnLoadEventPayload = {
-  url: string;
+export type ChangeEventPayload = {
+  signature: string;
 };
 
 export type ExpoSignOnGlassModuleEvents = {
-  onChange: (params: ChangeEventPayload) => void;
+  // onDrawingChanged: (params: ChangeEventPayload) => void;
 };
 
-export type ChangeEventPayload = {
-  value: string;
+export type ExpoSignOnGlassViewType = {
+  expose: () => Promise<string>;
+  clear: () => Promise<void>;
 };
 
 export type ExpoSignOnGlassViewProps = {
-  url: string;
-  onLoad: (event: { nativeEvent: OnLoadEventPayload }) => void;
+  onStartSign?: (event: { nativeEvent: ChangeEventPayload }) => void;
   style?: StyleProp<ViewStyle>;
 };

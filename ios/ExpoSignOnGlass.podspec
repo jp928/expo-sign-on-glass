@@ -18,6 +18,9 @@ Pod::Spec.new do |s|
   s.source         = { git: 'https://github.com/jp928/expo-sign-on-glass' }
   s.static_framework = true
 
+  # Add PencilKit as a dependency
+  s.frameworks = 'UIKit', 'PencilKit'
+
   s.dependency 'ExpoModulesCore'
 
   # Swift/Objective-C compatibility
