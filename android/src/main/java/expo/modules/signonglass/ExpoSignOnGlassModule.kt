@@ -2,7 +2,9 @@ package expo.modules.signonglass
 
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
-import java.net.URL
+import expo.modules.kotlin.Promise
+import expo.modules.kotlin.exception.CodedException
+import expo.modules.kotlin.functions.Queues
 
 class ExpoSignOnGlassModule : Module() {
   // Each module class must implement the definition function. The definition consists of components
@@ -14,37 +16,23 @@ class ExpoSignOnGlassModule : Module() {
     // The module will be accessible from `requireNativeModule('ExpoSignOnGlass')` in JavaScript.
     Name("ExpoSignOnGlass")
 
-    // Sets constant properties on the module. Can take a dictionary or a closure that returns a dictionary.
-    Constants(
-      "PI" to Math.PI
-    )
-
-    // Defines event names that the module can send to JavaScript.
-    Events("onChange")
-
-    // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
-    Function("hello") {
-      "Hello world! 👋"
-    }
-
-    // Defines a JavaScript function that always returns a Promise and whose native code
-    // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { value: String ->
-      // Send an event to JavaScript.
-      sendEvent("onChange", mapOf(
-        "value" to value
-      ))
-    }
-
     // Enables the module to be used as a native view. Definition components that are accepted as part of
     // the view definition: Prop, Events.
     View(ExpoSignOnGlassView::class) {
-      // Defines a setter for the `url` prop.
-      Prop("url") { view: ExpoSignOnGlassView, url: URL ->
-        view.webView.loadUrl(url.toString())
-      }
-      // Defines an event that the view can send to JavaScript.
-      Events("onLoad")
+      AsyncFunction("expose") { view: ExpoSignOnGlassView, promise: Promise ->
+        try {
+          val image = view.getSignatureImage()
+          promise.resolve(image)
+        } catch (e: Exception) {
+         promise.reject(CodedException(message = e.message ?: "Unknown error"))
+        }
+      }.runOnQueue(Queues.MAIN)
+
+      AsyncFunction("clear") { view: ExpoSignOnGlassView, promise: Promise ->
+        view.clearCanvas()
+      }.runOnQueue(Queues.MAIN)
+
+      Events("onStartSign")
     }
   }
 }

@@ -13,7 +13,6 @@ public class ExpoSignOnGlassModule: Module {
           // Compress the image data with medium quality (0.5)
             if let compressedData = image.jpegData(compressionQuality: 0.5) {
               let base64String = compressedData.base64EncodedString()
-              // Add data URI header for JPEG image
               let dataUri = "data:image/jpeg;base64," + base64String
               promise.resolve(dataUri)
             } else {
@@ -27,9 +26,9 @@ public class ExpoSignOnGlassModule: Module {
         AsyncFunction("clear") { (view: ExpoSignOnGlassView, promise: Promise)  in
           view.clearCanvas()
         }.runOnQueue(.main)
+
+        Events("onStartSign") 
     }
 
-    Events("onStartSign")
-      
   }
 }

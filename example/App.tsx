@@ -29,7 +29,10 @@ export default function App() {
           <ExpoSignOnGlassView
             ref={ref}
             style={styles.view}
-            onStartSign={(d) => console.log(d)}
+            onStartSign={(d) => {
+              console.log("---------------------->");
+              console.log(d);
+            }}
           />
         </Group>
       </ScrollView>
