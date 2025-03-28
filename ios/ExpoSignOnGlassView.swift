@@ -58,6 +58,7 @@ class ExpoSignOnGlassView: ExpoView {
     }
     
     func clearCanvas() {
+        signatureDelegate?.isClearing = true
         canvasView.drawing = PKDrawing()
     }
     
@@ -72,13 +73,18 @@ class ExpoSignOnGlassView: ExpoView {
 
 class SignOnGlassViewDelegate: NSObject, PKCanvasViewDelegate {
     let onStartSign: (String) -> Void
-    
+    var isClearing: Bool = false
     init(onStartSign: @escaping (String) -> Void) {
         self.onStartSign = onStartSign
         super.init()
     }
     
     func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
+        if isClearing {
+            isClearing = false
+            return
+        }
+
         let drawingData = canvasView.drawing.dataRepresentation()
         if drawingData.isEmpty {
             return
