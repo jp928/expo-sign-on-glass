@@ -29,6 +29,7 @@ export default function App() {
           <ExpoSignOnGlassView
             ref={ref}
             style={styles.view}
+            thickness={8}
             onStartSign={(d) => {
               console.log("---------------------->");
               console.log(d);

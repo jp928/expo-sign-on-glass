@@ -4,9 +4,7 @@ export type ChangeEventPayload = {
   signature: string;
 };
 
-export type ExpoSignOnGlassModuleEvents = {
-  // onDrawingChanged: (params: ChangeEventPayload) => void;
-};
+export type ExpoSignOnGlassModuleEvents = {};
 
 export type ExpoSignOnGlassViewType = {
   expose: () => Promise<string>;
@@ -16,4 +14,5 @@ export type ExpoSignOnGlassViewType = {
 export type ExpoSignOnGlassViewProps = {
   onStartSign?: (event: { nativeEvent: ChangeEventPayload }) => void;
   style?: StyleProp<ViewStyle>;
+  thickness?: number;
 };

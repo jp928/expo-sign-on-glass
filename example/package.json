@@ -1,6 +1,6 @@
 {
   "name": "expo-sign-on-glass-example",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "index.ts",
   "scripts": {
     "start": "expo start",
@@ -9,9 +9,9 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "expo": "~52.0.41",
+    "expo": "~52.0.46",
     "react": "18.3.1",
-    "react-native": "0.76.7"
+    "react-native": "0.76.9"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

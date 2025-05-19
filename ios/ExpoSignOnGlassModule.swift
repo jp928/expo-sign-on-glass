@@ -28,6 +28,10 @@ public class ExpoSignOnGlassModule: Module {
         }.runOnQueue(.main)
 
         Events("onStartSign") 
+
+        Prop("thickness") { (view: ExpoSignOnGlassView, thickness: CGFloat) in
+          view.setThickness(thickness)
+        }
     }
 
   }

@@ -33,6 +33,10 @@ class ExpoSignOnGlassModule : Module() {
       }.runOnQueue(Queues.MAIN)
 
       Events("onStartSign")
+
+      Prop("thickness") { view: ExpoSignOnGlassView, prop: Double ->
+        view.setThickness(thickness = prop)
+      }
     }
   }
 }

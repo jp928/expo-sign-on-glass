@@ -49,10 +49,10 @@ class ExpoSignOnGlassView: ExpoView {
             canvasView.tool = tool
         }
     }
-    
-    func setPencilWidth(_ width: Double) {
+
+    func setThickness(_ thickness: CGFloat) {
         if let inkTool = tool as? PKInkingTool {
-            tool = PKInkingTool(inkTool.inkType, color: inkTool.color, width: CGFloat(width))
+            tool = PKInkingTool(inkTool.inkType, color: inkTool.color, width: thickness)
             canvasView.tool = tool
         }
     }

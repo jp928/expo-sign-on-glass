@@ -55,4 +55,8 @@ class ExpoSignOnGlassView(context: Context, appContext: AppContext) : ExpoView(c
     val base64String = Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
     return "data:image/jpeg;base64,$base64String"
   }
+
+  fun setThickness(thickness: Double) {
+    signatureView.setMaxWidth(thickness.toFloat())
+  }
 }
